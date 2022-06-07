@@ -1,6 +1,6 @@
 USE [FPTU]
 GO
-/****** Object:  Table [dbo].[Attendance]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Attendance]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[Attendance](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Dept]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Dept]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32,25 +32,23 @@ CREATE TABLE [dbo].[Dept](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Group]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Group]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Group](
 	[GID] [int] IDENTITY(1,1) NOT NULL,
-	[GName] [varchar](50) NOT NULL,
+	[Gname] [varchar](50) NOT NULL,
 	[SubjectID] [int] NOT NULL,
 	[LecturerID] [int] NOT NULL,
-	[RoomID] [int] NOT NULL,
-	[SlotID] [int] NOT NULL,
- CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Table_1] PRIMARY KEY CLUSTERED 
 (
 	[GID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Group_Enroll]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Group_Enroll]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -65,7 +63,7 @@ CREATE TABLE [dbo].[Group_Enroll](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Lecturer]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Lecturer]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -84,7 +82,7 @@ CREATE TABLE [dbo].[Lecturer](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Major]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Major]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -99,7 +97,7 @@ CREATE TABLE [dbo].[Major](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Room]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Room]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -113,7 +111,7 @@ CREATE TABLE [dbo].[Room](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Session]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Session]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -123,13 +121,16 @@ CREATE TABLE [dbo].[Session](
 	[SessionName] [varchar](50) NOT NULL,
 	[SessionDetail] [varchar](150) NOT NULL,
 	[GID] [int] NOT NULL,
+	[SlotID] [int] NOT NULL,
+	[RoomID] [int] NOT NULL,
+	[DateApply] [date] NOT NULL,
  CONSTRAINT [PK_Session] PRIMARY KEY CLUSTERED 
 (
 	[SessionID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Slot]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Slot]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -145,7 +146,7 @@ CREATE TABLE [dbo].[Slot](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Student]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Student]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -166,7 +167,7 @@ CREATE TABLE [dbo].[Student](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Subject]    Script Date: 04/06/2022 15:45:39 ******/
+/****** Object:  Table [dbo].[Subject]    Script Date: 07/06/2022 07:27:05 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -248,7 +249,7 @@ INSERT [dbo].[Slot] ([id], [name], [TimeStart], [TimeEnd]) VALUES (8, N'Slot8', 
 GO
 SET IDENTITY_INSERT [dbo].[Slot] OFF
 GO
-ALTER TABLE [dbo].[Attendance]  WITH CHECK ADD  CONSTRAINT [FK_Attendance_Session] FOREIGN KEY([SessionID])
+ALTER TABLE [dbo].[Attendance]  WITH CHECK ADD  CONSTRAINT [FK_Attendance_Session] FOREIGN KEY([SID])
 REFERENCES [dbo].[Session] ([SessionID])
 GO
 ALTER TABLE [dbo].[Attendance] CHECK CONSTRAINT [FK_Attendance_Session]
@@ -262,11 +263,6 @@ ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Lecturer] FOREIG
 REFERENCES [dbo].[Lecturer] ([LID])
 GO
 ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Lecturer]
-GO
-ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Room] FOREIGN KEY([RoomID])
-REFERENCES [dbo].[Room] ([RID])
-GO
-ALTER TABLE [dbo].[Group] CHECK CONSTRAINT [FK_Group_Room]
 GO
 ALTER TABLE [dbo].[Group]  WITH CHECK ADD  CONSTRAINT [FK_Group_Subject] FOREIGN KEY([SubjectID])
 REFERENCES [dbo].[Subject] ([id])
@@ -292,6 +288,16 @@ ALTER TABLE [dbo].[Session]  WITH CHECK ADD  CONSTRAINT [FK_Session_Group] FOREI
 REFERENCES [dbo].[Group] ([GID])
 GO
 ALTER TABLE [dbo].[Session] CHECK CONSTRAINT [FK_Session_Group]
+GO
+ALTER TABLE [dbo].[Session]  WITH CHECK ADD  CONSTRAINT [FK_Session_Room] FOREIGN KEY([RoomID])
+REFERENCES [dbo].[Room] ([RID])
+GO
+ALTER TABLE [dbo].[Session] CHECK CONSTRAINT [FK_Session_Room]
+GO
+ALTER TABLE [dbo].[Session]  WITH CHECK ADD  CONSTRAINT [FK_Session_Slot] FOREIGN KEY([SlotID])
+REFERENCES [dbo].[Slot] ([id])
+GO
+ALTER TABLE [dbo].[Session] CHECK CONSTRAINT [FK_Session_Slot]
 GO
 ALTER TABLE [dbo].[Student]  WITH CHECK ADD  CONSTRAINT [FK_Student_Major] FOREIGN KEY([MID])
 REFERENCES [dbo].[Major] ([MID])
