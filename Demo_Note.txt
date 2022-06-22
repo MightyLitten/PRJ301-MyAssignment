@@ -1,0 +1,10 @@
+Weekly shchedule:
+Year combo box: javascript
+week combobox: javascript
+days of week: java script
+schedule: load from session table by logged in user 
+- status load from attendence table
+- time frame load from slot table
+
+Student List:
+load from Student table join Group table join Attendence
