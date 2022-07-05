@@ -4,20 +4,25 @@
  */
 package Controller;
 
+import DAO.SlotDBContext;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.IsoFields;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
  * @author apc
  */
-@WebServlet(name = "NewServlet", urlPatterns = {"/NewServlet"})
-public class NewServlet extends HttpServlet {
+public class ScheduleController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,9 +42,40 @@ public class NewServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    SlotDBContext slotDB = new SlotDBContext();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        LocalDate ld = LocalDate.now();
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = ld.getYear();
+        int currentWeek = ld.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        System.out.println(currentWeek + " " + currentYear);
+        int dow = LocalDate.now().getDayOfWeek().getValue();
+        ArrayList<Date> days = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            Date startDate = Date.valueOf(LocalDate.now().minusDays(dow - 1).plusDays(i));
+            days.add(startDate);
+        }
+        int weeksOfYear = Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR);
+        ArrayList<String> weeks = new ArrayList<>();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM");
+        for (int i = 0; i < weeksOfYear; i++) {
+            calendar.clear();
+            calendar.set(Calendar.WEEK_OF_YEAR, i+1);
+            calendar.set(Calendar.YEAR, currentYear);
+            String w = df.format(calendar.getTime()) + " to ";
+            calendar.add(Calendar.DATE, 6);
+            w += df.format(calendar.getTime());
+            weeks.add(w);
+        }
+        request.setAttribute("weeks", weeks);
+        request.setAttribute("currentWeek", currentWeek);
+        request.setAttribute("currentYear", currentYear);
+        request.setAttribute("days", days);
+        request.setAttribute("slots", slotDB.list());
+        request.getRequestDispatcher("view/WeeklySchedule.jsp").forward(request, response);
     }
 
     /**
