@@ -15,7 +15,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="js/weekCalculate.js" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     </head>
     <body>
@@ -23,16 +22,20 @@
             <thead class="table-primary">
                 <tr>
                     <th scope="col" rowspan="2" class="col-md-2">
-                        Year 
-                        <select>
-                            <option>2022</option>
-                        </select> <br/>
-                        Week 
-                        <select>
-                            <c:forEach items="${requestScope.weeks}" var="w" varStatus="loop">
-                                <option value="${loop.index}" <c:if test="${loop.index eq requestScope.currentWeek-1}">selected="selected"</c:if>>${w}</option>
-                            </c:forEach>
-                        </select>
+                        <form action="schedule"method="POST">
+                            Year 
+                            <select name="year">
+                                <option <c:if test="${requestScope.year eq requestScope.currentYear-1}">selected="selected"</c:if>>${requestScope.currentYear-1}</option>
+                                <option <c:if test="${requestScope.year eq requestScope.currentYear}">selected="selected"</c:if>>${requestScope.currentYear}</option>
+                                <option <c:if test="${requestScope.year eq requestScope.currentYear+1}">selected="selected"</c:if>>${requestScope.currentYear+1}</option>
+                                </select> <br/>
+                                Week 
+                                <select name="week">
+                                <c:forEach items="${requestScope.weeks}" var="w" varStatus="loop">
+                                    <option value="${loop.index}" <c:if test="${loop.index eq requestScope.week}">selected="selected"</c:if>>${w}</option>
+                                </c:forEach>
+                            </select>
+                        </form>
                     </th>
                     <th scope="col">Mon</th>
                     <th scope="col">Tue</th>
@@ -52,21 +55,22 @@
                 <c:forEach items="${requestScope.slots}" var="sl">
                     <tr>
                         <th scope="row">${sl.slname}</th>
-                        <td>-</td>
-                        <td>
-                            <a href="Demo_StudentList.html">PRJ301</a><br/>
-                            at BE-213 <br/>
-                            <a class="text-success">(attended)</a><br/>
-                            <a class="text-white bg-success">(<fmt:formatDate type="time" timeStyle="short" value="${sl.start}" />-<fmt:formatDate type="time" timeStyle="short" value="${sl.end}" />)</a>
-                        </td>
-                        <td>-</td>
-                        <td><a href="Demo_StudentList.html">PRJ301</a><br/>
-                            at BE-213 <br/>
-                            <a class="text-danger">(not yet)</a><br/>
-                            <a class="text-white bg-success">(7:30-9:00)</a></td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
+                            <c:forEach items="${requestScope.days}" var="d">
+                            <td>
+                                <c:forEach items="${requestScope.sessions}" var="se">
+                                    <c:if test="${d eq se.applyDate and sl.slid eq se.slot.slid}">
+                                        <a href="Demo_StudentList.html">${se.group.subject.sucode}</a><br/>
+                                        at ${se.room.rname} <br/>
+                                        <c:if test="${se.attendences.isEmpty()}"><a class="text-danger">(not yet)</a></c:if>
+                                        <c:if test="${!se.attendences.isEmpty()}"><a class="text-success">(taken)</a></c:if><br/>
+                                        <a class="text-white bg-success">(<fmt:formatDate type="time" timeStyle="short" value="${sl.start}" />-<fmt:formatDate type="time" timeStyle="short" value="${sl.end}" />)</a>
+                                    </c:if>
+                                </c:forEach>
+                                <c:if test="${requestScope.sessions.isEmpty()}">
+                                    -
+                                </c:if>
+                            </td>
+                        </c:forEach>
                     </tr>
                 </c:forEach>
             </tbody>

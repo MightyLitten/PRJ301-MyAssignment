@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import DAO.SessionDBContext;
 import DAO.SlotDBContext;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -17,6 +18,7 @@ import java.time.ZoneId;
 import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 import java.util.Calendar;
+import model.Session;
 
 /**
  *
@@ -43,39 +45,59 @@ public class ScheduleController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     SlotDBContext slotDB = new SlotDBContext();
+    SessionDBContext seDB = new SessionDBContext();
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String raw_year = request.getParameter("year");
+        String raw_week = request.getParameter("week");
         LocalDate ld = LocalDate.now();
         Calendar calendar = Calendar.getInstance();
         int currentYear = ld.getYear();
-        int currentWeek = ld.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        System.out.println(currentWeek + " " + currentYear);
-        int dow = LocalDate.now().getDayOfWeek().getValue();
+        int currentWeek = ld.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) - 1;
+        int week = (raw_week != null && raw_week.length() > 0) ? Integer.parseInt(raw_week) : currentWeek;
+        int year = (raw_year != null && raw_year.length() > 0) ? Integer.parseInt(raw_year) : currentYear;
         ArrayList<Date> days = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            Date startDate = Date.valueOf(LocalDate.now().minusDays(dow - 1).plusDays(i));
-            days.add(startDate);
+            calendar.clear();
+            calendar.set(Calendar.WEEK_OF_YEAR, week);
+            calendar.set(Calendar.YEAR, currentYear);
+            calendar.add(Calendar.DATE, i);
+            Date day = new java.sql.Date(calendar.getTimeInMillis());
+            days.add(day);
         }
         int weeksOfYear = Calendar.getInstance().getActualMaximum(Calendar.WEEK_OF_YEAR);
         ArrayList<String> weeks = new ArrayList<>();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM");
         for (int i = 0; i < weeksOfYear; i++) {
             calendar.clear();
-            calendar.set(Calendar.WEEK_OF_YEAR, i+1);
+            calendar.set(Calendar.WEEK_OF_YEAR, i + 1);
             calendar.set(Calendar.YEAR, currentYear);
             String w = df.format(calendar.getTime()) + " to ";
             calendar.add(Calendar.DATE, 6);
             w += df.format(calendar.getTime());
             weeks.add(w);
         }
+        calendar.clear();
+        calendar.set(Calendar.WEEK_OF_YEAR, week);
+        calendar.set(Calendar.YEAR, currentYear);
+        Date start = new java.sql.Date(calendar.getTimeInMillis());
+        calendar.add(Calendar.DATE, 6);
+        Date end = new java.sql.Date(calendar.getTimeInMillis());
+        request.setAttribute("sessions", seDB.weeklySessions(start, end, 1));
         request.setAttribute("weeks", weeks);
-        request.setAttribute("currentWeek", currentWeek);
+        request.setAttribute("week", week-1);
+        request.setAttribute("year", year);
         request.setAttribute("currentYear", currentYear);
         request.setAttribute("days", days);
         request.setAttribute("slots", slotDB.list());
         request.getRequestDispatcher("view/WeeklySchedule.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
@@ -89,6 +111,7 @@ public class ScheduleController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
