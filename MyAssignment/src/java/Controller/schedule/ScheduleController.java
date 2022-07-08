@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.schedule;
 
 import DAO.SessionDBContext;
 import DAO.SlotDBContext;
@@ -51,17 +51,21 @@ public class ScheduleController extends HttpServlet {
             throws ServletException, IOException {
         String raw_year = request.getParameter("year");
         String raw_week = request.getParameter("week");
+        String raw_selectedYear = request.getParameter("selectedYear");
         LocalDate ld = LocalDate.now();
         Calendar calendar = Calendar.getInstance();
         int currentYear = ld.getYear();
-        int currentWeek = ld.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) - 1;
-        int week = (raw_week != null && raw_week.length() > 0) ? Integer.parseInt(raw_week) : currentWeek;
+        int currentWeek = ld.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+        int week = (raw_week != null && raw_week.length() > 0) ? Integer.parseInt(raw_week)+1 : currentWeek;
         int year = (raw_year != null && raw_year.length() > 0) ? Integer.parseInt(raw_year) : currentYear;
+        int selectedYear = (raw_year != null && raw_year.length() > 0)? Integer.parseInt(raw_selectedYear):currentYear;
+        week = (selectedYear == year)?week:1;
+        week = (selectedYear != year && year == currentYear)?currentWeek:week;
         ArrayList<Date> days = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             calendar.clear();
             calendar.set(Calendar.WEEK_OF_YEAR, week);
-            calendar.set(Calendar.YEAR, currentYear);
+            calendar.set(Calendar.YEAR, year);
             calendar.add(Calendar.DATE, i);
             Date day = new java.sql.Date(calendar.getTimeInMillis());
             days.add(day);
@@ -72,7 +76,7 @@ public class ScheduleController extends HttpServlet {
         for (int i = 0; i < weeksOfYear; i++) {
             calendar.clear();
             calendar.set(Calendar.WEEK_OF_YEAR, i + 1);
-            calendar.set(Calendar.YEAR, currentYear);
+            calendar.set(Calendar.YEAR, year);
             String w = df.format(calendar.getTime()) + " to ";
             calendar.add(Calendar.DATE, 6);
             w += df.format(calendar.getTime());

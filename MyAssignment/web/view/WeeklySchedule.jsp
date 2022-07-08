@@ -16,64 +16,72 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+        <script>
+            myfunction(){
+
+            }
+        </script>
     </head>
     <body>
-        <table class="table table-bordered">
-            <thead class="table-primary">
-                <tr>
-                    <th scope="col" rowspan="2" class="col-md-2">
-                        <form action="schedule"method="POST">
-                            Year 
-                            <select name="year">
-                                <option <c:if test="${requestScope.year eq requestScope.currentYear-1}">selected="selected"</c:if>>${requestScope.currentYear-1}</option>
-                                <option <c:if test="${requestScope.year eq requestScope.currentYear}">selected="selected"</c:if>>${requestScope.currentYear}</option>
-                                <option <c:if test="${requestScope.year eq requestScope.currentYear+1}">selected="selected"</c:if>>${requestScope.currentYear+1}</option>
-                                </select> <br/>
-                                Week 
-                                <select name="week">
-                                <c:forEach items="${requestScope.weeks}" var="w" varStatus="loop">
-                                    <option value="${loop.index}" <c:if test="${loop.index eq requestScope.week}">selected="selected"</c:if>>${w}</option>
-                                </c:forEach>
-                            </select>
-                        </form>
-                    </th>
-                    <th scope="col">Mon</th>
-                    <th scope="col">Tue</th>
-                    <th scope="col">Wed</th>
-                    <th scope="col">Thu</th>
-                    <th scope="col">Fri</th>
-                    <th scope="col">Sat</th>
-                    <th scope="col">Sun</th>
-                </tr>
-                <tr>
-                    <c:forEach items="${requestScope.days}" var="d">
-                        <th scope="col"><fmt:formatDate pattern = "dd/MM" value="${d}"/></th>
-                        </c:forEach>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${requestScope.slots}" var="sl">
+        <div class="container">
+            <table class="table table-bordered">
+                <thead class="table-primary">
                     <tr>
-                        <th scope="row">${sl.slname}</th>
-                            <c:forEach items="${requestScope.days}" var="d">
-                            <td>
-                                <c:forEach items="${requestScope.sessions}" var="se">
-                                    <c:if test="${d eq se.applyDate and sl.slid eq se.slot.slid}">
-                                        <a href="Demo_StudentList.html">${se.group.subject.sucode}</a><br/>
-                                        at ${se.room.rname} <br/>
-                                        <c:if test="${se.attendences.isEmpty()}"><a class="text-danger">(not yet)</a></c:if>
-                                        <c:if test="${!se.attendences.isEmpty()}"><a class="text-success">(taken)</a></c:if><br/>
-                                        <a class="text-white bg-success">(<fmt:formatDate type="time" timeStyle="short" value="${sl.start}" />-<fmt:formatDate type="time" timeStyle="short" value="${sl.end}" />)</a>
-                                    </c:if>
-                                </c:forEach>
-                                <c:if test="${requestScope.sessions.isEmpty()}">
-                                    -
-                                </c:if>
-                            </td>
-                        </c:forEach>
+                        <th scope="col" rowspan="2" class="col-md-2">
+                            <form action="schedule"method="POST">
+                                Year 
+                                <select name="year" onchange="this.form.submit()">
+                                    <option <c:if test="${requestScope.year eq requestScope.currentYear-1}">selected="selected" </c:if>value="${requestScope.currentYear-1}">${requestScope.currentYear-1}</option>
+                                    <option <c:if test="${requestScope.year eq requestScope.currentYear}">selected="selected" </c:if> value="${requestScope.currentYear}">${requestScope.currentYear}</option>
+                                    <option <c:if test="${requestScope.year eq requestScope.currentYear+1}">selected="selected"</c:if> value="${requestScope.currentYear+1}">${requestScope.currentYear+1}</option>
+                                    </select> <br/>
+                                    <input type="hidden" name="selectedYear" value="${requestScope.year}">
+                                Week 
+                                <select name="week" onchange="this.form.submit()">
+                                    <c:forEach items="${requestScope.weeks}" var="w" varStatus="loop">
+                                        <option value="${loop.index}" <c:if test="${loop.index eq requestScope.week}">selected="selected"</c:if>>${w}</option>
+                                    </c:forEach>
+                                </select>
+                            </form>
+                        </th>
+                        <th scope="col">Mon</th>
+                        <th scope="col">Tue</th>
+                        <th scope="col">Wed</th>
+                        <th scope="col">Thu</th>
+                        <th scope="col">Fri</th>
+                        <th scope="col">Sat</th>
+                        <th scope="col">Sun</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                    <tr>
+                        <c:forEach items="${requestScope.days}" var="d">
+                            <th scope="col"><fmt:formatDate pattern = "dd/MM" value="${d}"/></th>
+                            </c:forEach>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${requestScope.slots}" var="sl">
+                        <tr>
+                            <th scope="row">${sl.slname}</th>
+                                <c:forEach items="${requestScope.days}" var="d">
+                                <td>
+                                    <c:forEach items="${requestScope.sessions}" var="se">
+                                        <c:if test="${d eq se.applyDate and sl.slid eq se.slot.slid}">
+                                            <a href="attendance/create?gid=${se.group.gid}&seid=${se.seid}">${se.group.subject.sucode}</a><br/>
+                                            at ${se.room.rname} <br/>
+                                            <c:if test="${se.attendences.isEmpty()}"><a class="text-danger">(not yet)</a></c:if>
+                                            <c:if test="${!se.attendences.isEmpty()}"><a class="text-success">(taken)</a></c:if><br/>
+                                            <a class="text-white bg-success">(<fmt:formatDate type="time" timeStyle="short" value="${sl.start}" />-<fmt:formatDate type="time" timeStyle="short" value="${sl.end}" />)</a>
+                                        </c:if>
+                                    </c:forEach>
+                                    <c:if test="${!flag}">
+                                        -
+                                    </c:if>
+                                </td>
+                            </c:forEach>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </body>
 </html>
