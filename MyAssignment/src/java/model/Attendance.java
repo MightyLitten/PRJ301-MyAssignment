@@ -4,18 +4,18 @@
  */
 package model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
  * @author apc
  */
-public class Attendence {
+public class Attendance {
     private Session session;
     private Student student;
     private String status;
     private String comment;
-    private Date editDate;
+    private Timestamp editDate;
     private Lecturer lecturer;
 
     public Session getSession() {
@@ -50,11 +50,11 @@ public class Attendence {
         this.comment = comment;
     }
 
-    public Date getEditDate() {
+    public Timestamp getEditDate() {
         return editDate;
     }
 
-    public void setEditDate(Date editDate) {
+    public void setEditDate(Timestamp editDate) {
         this.editDate = editDate;
     }
 

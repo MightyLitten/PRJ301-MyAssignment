@@ -6,7 +6,6 @@
 package Controller.attendance;
 
 import DAO.AttendanceDBContext;
-import DAO.GroupDBContext;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -14,8 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import model.Attendance;
-import model.Group;
 import model.Lecturer;
 import model.Session;
 import model.Student;
@@ -24,7 +23,7 @@ import model.Student;
  *
  * @author apc
  */
-public class CreateController extends HttpServlet {
+public class EditController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -46,14 +45,13 @@ public class CreateController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int gid = Integer.parseInt(request.getParameter("gid"));
         int seid = Integer.parseInt(request.getParameter("seid"));
-        GroupDBContext groupDB = new GroupDBContext();
-        Group g = groupDB.get(gid);
+        AttendanceDBContext attendDB = new AttendanceDBContext();
+        ArrayList<Attendance> attendances = attendDB.listBySessionID(seid);
         request.setAttribute("seid", seid);
-        request.setAttribute("group", g);
-        request.setAttribute("students", g.getStudents());
-        request.getRequestDispatcher("../view/attendence/create.jsp").forward(request, response);
+        request.setAttribute("attendances", attendances);
+        request.setAttribute("flag", "edit");
+        request.getRequestDispatcher("../view/attendance/edit.jsp").forward(request, response);
     } 
 
     /** 
@@ -85,7 +83,7 @@ public class CreateController extends HttpServlet {
             se.getAttendances().add(a);
         }
         AttendanceDBContext attendDB = new AttendanceDBContext();
-        attendDB.insertList(se.getAttendances());
+        attendDB.UpdateList(se.getAttendances());
         response.sendRedirect("list?seid="+se.getSeid());
     }
 

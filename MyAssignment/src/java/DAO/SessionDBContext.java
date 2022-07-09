@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Attendence;
+import model.Attendance;
 import model.Group;
 import model.Lecturer;
 import model.Room;
@@ -63,9 +63,8 @@ public class SessionDBContext extends DBContext<Session> {
                 Room room = new Room();
                 room.setRname(rs.getString("RName"));
                 se.setRoom(room);
-                AttendenceDBContext attendDB = new AttendenceDBContext();
-                ArrayList<Attendence> attendences = attendDB.listBySessionID(se.getSeid());
-                se.setAttendences(attendences);
+                AttendanceDBContext attendDB = new AttendanceDBContext();
+                se.setAttendances(attendDB.listBySessionID(se.getSeid()));
                 se.setApplyDate(rs.getDate("DateApply"));
                 sessions.add(se);
             }

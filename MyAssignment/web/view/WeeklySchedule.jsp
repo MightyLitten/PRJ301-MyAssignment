@@ -10,17 +10,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Weekly Schedule</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-        <script>
-            myfunction(){
-
-            }
-        </script>
     </head>
     <body>
         <div class="container">
@@ -66,16 +61,17 @@
                                 <td>
                                     <c:forEach items="${requestScope.sessions}" var="se">
                                         <c:if test="${d eq se.applyDate and sl.slid eq se.slot.slid}">
-                                            <a href="attendance/create?gid=${se.group.gid}&seid=${se.seid}">${se.group.subject.sucode}</a><br/>
+                                            <a <c:if test="${se.attendances.isEmpty()}">href="attendance/create?gid=${se.group.gid}&seid=${se.seid}"</c:if>
+                                               <c:if test="${!se.attendances.isEmpty()}">href="attendance/list?seid=${se.seid}"</c:if>>
+                                                ${se.group.subject.sucode}
+                                            </a><br/>
                                             at ${se.room.rname} <br/>
-                                            <c:if test="${se.attendences.isEmpty()}"><a class="text-danger">(not yet)</a></c:if>
-                                            <c:if test="${!se.attendences.isEmpty()}"><a class="text-success">(taken)</a></c:if><br/>
+                                            <c:if test="${se.attendances.isEmpty()}"><a class="text-danger">(not yet)</a></c:if>
+                                            <c:if test="${!se.attendances.isEmpty()}"><a class="text-success">(taken)</a></c:if><br/>
                                             <a class="text-white bg-success">(<fmt:formatDate type="time" timeStyle="short" value="${sl.start}" />-<fmt:formatDate type="time" timeStyle="short" value="${sl.end}" />)</a>
                                         </c:if>
                                     </c:forEach>
-                                    <c:if test="${!flag}">
-                                        -
-                                    </c:if>
+                                    -
                                 </td>
                             </c:forEach>
                         </tr>

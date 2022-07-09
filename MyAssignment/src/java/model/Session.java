@@ -19,14 +19,14 @@ public class Session {
     private Slot slot;
     private Room room;
     private Date applyDate;
-    private ArrayList<Attendence> attendences = new ArrayList<>();
+    private ArrayList<Attendance> attendances = new ArrayList<>();
 
-    public ArrayList<Attendence> getAttendences() {
-        return attendences;
+    public ArrayList<Attendance> getAttendances() {
+        return attendances;
     }
 
-    public void setAttendences(ArrayList<Attendence> attendences) {
-        this.attendences = attendences;
+    public void setAttendances(ArrayList<Attendance> attendances) {
+        this.attendances = attendances;
     }
 
     public int getSeid() {

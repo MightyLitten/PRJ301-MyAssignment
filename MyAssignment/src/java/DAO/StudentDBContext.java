@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Attendence;
+import model.Attendance;
 import model.Group;
 import model.Lecturer;
 import model.Session;
@@ -41,7 +41,7 @@ public class StudentDBContext extends DBContext<Student> {
                 students.add(s);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AttendenceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return students;
     }

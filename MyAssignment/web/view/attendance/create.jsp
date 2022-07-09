@@ -10,13 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Create</title>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     </head>
     <body>
-        <form action="" method="POST">
+        <form action="create" method="POST">
             <div class="container text-center" >
             <table class="table table-bordered">
                 <thead class="table-primary">
@@ -39,18 +39,20 @@
                             <td><a>${s.sname}</a></td>
                             <td><img src="${s.img}" class="rounded" width="150" height="150" alt="student picture"/></td>
                             <td>
-                                <input type="radio" checked="checked" name="status${loop.index}" value="absent" /> absent 
-                                <input type="radio" name="status${loop.index}" value="attend" /> attend
+                                <input id="absent${loop.index}" type="radio" checked="checked" name="status${loop.index}" value="absent" /> <label for="absent${loop.index}" class="text-danger">absent</label> 
+                                <input id="attend${loop.index}" type="radio" name="status${loop.index}" value="attend" /> <label for="attend${loop.index}" class="text-success">attend</label>
                                 <input type="hidden" name="id${loop.index}" value="${s.sid}"/>
                                 <input type="hidden" name="index" value="${loop.index}"/>
                             </td>
-                            <td><input type="text" name="comment"></td>
+                            <td><input type="text" name="comment${loop.index}"></td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
-                <input type="hidden" value="${requestScope.seid}">
-                <input class="" type="submit" value="Save">
+                <input type="hidden" name="seid" value="${requestScope.seid}">
+                <input type="submit" value="Save">
+                <a href="../schedule"><input type="button" value="Cancel"></a>
+                
             </div>
         </form>
     </body>
