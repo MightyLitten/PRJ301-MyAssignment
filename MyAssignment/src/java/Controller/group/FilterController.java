@@ -3,28 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller.attendance;
+package Controller.group;
 
-import DAO.AttendanceDBContext;
 import DAO.GroupDBContext;
+import DAO.SessionDBContext;
+import DAO.StudentDBContext;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import model.Attendance;
-import model.Group;
-import model.Lecturer;
-import model.Session;
-import model.Student;
 
 /**
  *
  * @author apc
  */
-public class CreateController extends HttpServlet {
+public class FilterController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,7 +28,6 @@ public class CreateController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -43,17 +37,14 @@ public class CreateController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    GroupDBContext groupDB = new GroupDBContext();
+    SessionDBContext sessDB = new SessionDBContext();
+    StudentDBContext stuDB = new StudentDBContext();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int gid = Integer.parseInt(request.getParameter("gid"));
-        int seid = Integer.parseInt(request.getParameter("seid"));
-        GroupDBContext groupDB = new GroupDBContext();
-        Group g = groupDB.get(gid);
-        request.setAttribute("seid", seid);
-        request.setAttribute("group", g);
-        request.setAttribute("students", g.getStudents());
-        request.getRequestDispatcher("../view/attendance/create.jsp").forward(request, response);
+        request.setAttribute("groups", groupDB.listByLecturer(1));
+        request.getRequestDispatcher("../view/group/filter.jsp").forward(request, response);
     } 
 
     /** 
@@ -66,27 +57,12 @@ public class CreateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String[] indexs = request.getParameterValues("index");
-        String raw_seid = request.getParameter("seid");
-        Session se = new Session();
-        se.setSeid(Integer.parseInt(raw_seid));
-        Lecturer l = new Lecturer();
-        l.setLid(1);
-        for (String index : indexs) {
-            Attendance a = new Attendance();
-            Student s = new Student();
-            a.setSession(se);
-            s.setSid(Integer.parseInt(request.getParameter("id"+index)));
-            a.setStudent(s);
-            a.setStatus(request.getParameter("status"+index).equals("attend")?"attended":"absented");
-            a.setComment(request.getParameter("comment"+index));
-            a.setEditDate(Timestamp.valueOf(LocalDateTime.now()));
-            a.setLecturer(l);
-            se.getAttendances().add(a);
-        }
-        AttendanceDBContext attendDB = new AttendanceDBContext();
-        attendDB.insertList(se.getAttendances());
-        response.sendRedirect("list?seid="+se.getSeid());
+        int gid = Integer.parseInt(request.getParameter("group"));
+        request.setAttribute("sessions", sessDB.listByGroup(gid));
+        request.setAttribute("students", stuDB.listByGroup(gid));
+        request.setAttribute("groups", groupDB.listByLecturer(1));
+        request.setAttribute("gid", gid);
+        request.getRequestDispatcher("../view/group/filter.jsp").forward(request, response);
     }
 
     /** 

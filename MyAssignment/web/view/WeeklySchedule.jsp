@@ -63,7 +63,7 @@
                                         <c:if test="${d eq se.applyDate and sl.slid eq se.slot.slid}">
                                             <a <c:if test="${se.attendances.isEmpty()}">href="attendance/create?gid=${se.group.gid}&seid=${se.seid}"</c:if>
                                                <c:if test="${!se.attendances.isEmpty()}">href="attendance/list?seid=${se.seid}"</c:if>>
-                                                ${se.group.subject.sucode}
+                                                ${se.group.gname}
                                             </a><br/>
                                             at ${se.room.rname} <br/>
                                             <c:if test="${se.attendances.isEmpty()}"><a class="text-danger">(not yet)</a></c:if>

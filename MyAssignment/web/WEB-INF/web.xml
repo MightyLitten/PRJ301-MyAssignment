@@ -16,6 +16,10 @@
         <servlet-name>EditController</servlet-name>
         <servlet-class>Controller.attendance.EditController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FilterController</servlet-name>
+        <servlet-class>Controller.group.FilterController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ScheduleController</servlet-name>
         <url-pattern>/schedule</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>EditController</servlet-name>
         <url-pattern>/attendance/edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FilterController</servlet-name>
+        <url-pattern>/group/filter</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

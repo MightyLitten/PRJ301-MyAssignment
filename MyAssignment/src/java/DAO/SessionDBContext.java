@@ -74,6 +74,33 @@ public class SessionDBContext extends DBContext<Session> {
         return sessions;
     }
 
+    public ArrayList<Session> listByGroup(int gid) {
+        ArrayList<Session> sessions = new ArrayList<>();
+        try {
+            String sql = "SELECT [SessionID]\n"
+                    + "      ,[SessionName]\n"
+                    + "      ,[SessionDetail]\n"
+                    + "      ,[GID]\n"
+                    + "  FROM [Session]\n"
+                    + "  WHERE [GID] = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, gid);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session se = new Session();
+                se.setSeid(rs.getInt("SessionID"));
+                se.setSename(rs.getString("SessionName"));
+                se.setSedetail(rs.getString("SessionDetail"));
+                AttendanceDBContext attendDB = new AttendanceDBContext();
+                se.setAttendances(attendDB.listBySessionID(se.getSeid()));
+                sessions.add(se);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sessions;
+    }
+
     @Override
     public ArrayList<Session> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
