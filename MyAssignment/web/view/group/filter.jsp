@@ -10,11 +10,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Weekly Schedule</title>
+        <title>Group</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../fontawesome-free/css/all.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     </head>

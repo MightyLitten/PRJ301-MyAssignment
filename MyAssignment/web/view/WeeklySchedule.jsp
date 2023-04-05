@@ -24,7 +24,7 @@
                     <tr>
                         <th scope="col" rowspan="2" class="col-md-2">
                             <form action="schedule"method="POST">
-                                Year 
+                                Year
                                 <select name="year" onchange="this.form.submit()">
                                     <option <c:if test="${requestScope.year eq requestScope.currentYear-1}">selected="selected" </c:if>value="${requestScope.currentYear-1}">${requestScope.currentYear-1}</option>
                                     <option <c:if test="${requestScope.year eq requestScope.currentYear}">selected="selected" </c:if> value="${requestScope.currentYear}">${requestScope.currentYear}</option>
